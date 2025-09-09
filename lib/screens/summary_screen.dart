@@ -14,7 +14,7 @@ class SummaryScreen extends ConsumerWidget {
     final totalExpenses = ref.watch(totalExpensesProvider);
     final totalAdvance = ref.watch(totalAdvanceProvider);
     final remainingBalance = ref.watch(remainingBalanceProvider);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Summary'),
@@ -59,7 +59,8 @@ class SummaryScreen extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.money_off, color: Colors.red.shade700, size: 32),
+                        Icon(Icons.money_off,
+                            color: Colors.red.shade700, size: 32),
                         const SizedBox(width: 12),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,10 +79,10 @@ class SummaryScreen extends ConsumerWidget {
                     ),
                     Text(
                       '₹${totalExpenses.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.red.shade700,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.red.shade700,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ],
                 ),
@@ -98,20 +99,21 @@ class SummaryScreen extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.account_balance_wallet, color: Colors.green.shade700, size: 32),
+                        Icon(Icons.account_balance_wallet,
+                            color: Colors.green.shade700, size: 32),
                         const SizedBox(width: 12),
                         Text(
-                          'Advance Payments Added',
+                          'Advance Payments',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
                     Text(
                       '₹${totalAdvance.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.green.shade700,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.green.shade700,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ],
                 ),
@@ -120,14 +122,20 @@ class SummaryScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             Card(
               elevation: 8,
-              color: remainingBalance >= 0 ? Colors.teal.shade50 : Colors.deepOrange.shade50,
+              color: remainingBalance >= 0
+                  ? Colors.teal.shade50
+                  : Colors.deepOrange.shade50,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
                     Icon(
-                      remainingBalance >= 0 ? Icons.check_circle : Icons.warning,
-                      color: remainingBalance >= 0 ? Colors.teal : Colors.deepOrange,
+                      remainingBalance >= 0
+                          ? Icons.check_circle
+                          : Icons.warning,
+                      color: remainingBalance >= 0
+                          ? Colors.teal
+                          : Colors.deepOrange,
                       size: 48,
                     ),
                     const SizedBox(height: 12),
@@ -138,10 +146,13 @@ class SummaryScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Text(
                       '₹${remainingBalance.toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: remainingBalance >= 0 ? Colors.teal : Colors.deepOrange,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                color: remainingBalance >= 0
+                                    ? Colors.teal
+                                    : Colors.deepOrange,
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -168,7 +179,7 @@ class SummaryScreen extends ConsumerWidget {
       ),
     );
   }
-  
+
   Widget _buildSummaryCard(
     BuildContext context,
     String title,
@@ -195,10 +206,10 @@ class SummaryScreen extends ConsumerWidget {
             ),
             Text(
               amount,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: color,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ],
         ),
