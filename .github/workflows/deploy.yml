@@ -1,0 +1,65 @@
+name: Flutter Android APK CI/CD
+
+on:
+  push:
+    branches:
+      - deploy
+
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Flutter SDK
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.2' # update to your Flutter version
+          channel: 'stable'
+      
+      # Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Recreate keystore from GitHub Secret
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
+
+      # Generate key.properties for Gradle
+      - name: Set up Gradle signing
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=release.keystore" >> android/key.properties
+      # Build signed release APK
+      - name: Build Signed APK
+        run: flutter build apk --release
+
+      # # Upload signed APK as artifact
+      # - name: Upload APK
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: signed-apk
+      #     path: build/app/outputs/flutter-apk/app-release.apk
+
+      # Generate a new release tag (v1.0.<run_number>)
+      - name: Set Release Tag
+        id: vars
+        run: echo "TAG=v1.0.${{ github.run_number }}" >> $GITHUB_ENV
+      
+      # Create GitHub Release with APK
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.TAG }}
+          name: "Release ${{ env.TAG }}"
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
