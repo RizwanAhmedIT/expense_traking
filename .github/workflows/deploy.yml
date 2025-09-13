@@ -42,9 +42,24 @@ jobs:
       - name: Build Signed APK
         run: flutter build apk --release
 
-      # Upload signed APK as artifact
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      # # Upload signed APK as artifact
+      # - name: Upload APK
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: signed-apk
+      #     path: build/app/outputs/flutter-apk/app-release.apk
+
+      # Generate a new release tag (v1.0.<run_number>)
+      - name: Set Release Tag
+        id: vars
+        run: echo "TAG=v1.0.${{ github.run_number }}" >> $GITHUB_ENV
+      
+      # Create GitHub Release with APK
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: signed-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          tag_name: ${{ env.TAG }}
+          name: "Release ${{ env.TAG }}"
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
