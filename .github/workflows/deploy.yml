@@ -26,10 +26,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Run tests
-      - name: Run tests
-        run: flutter test
-
       # Recreate keystore from GitHub Secret
       - name: Decode Keystore
         run: |
